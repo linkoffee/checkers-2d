@@ -67,7 +67,7 @@ func (g *Game) initPieces() {
     for y := 0; y < 3; y++ {
         for x := 0; x < cols; x++ {
             if (x+y)%2 != 0 {
-                piece := NewPiece(White, x, y, "checkersObj/white_default.png", "checkersObj/white_queen.png")
+                piece := NewPiece(White, x, y, "checkersObj/white_default.png", "checkersObj/white_king.png")
                 g.pieces = append(g.pieces, piece)
                 g.board[y][x] = piece
             }
@@ -78,7 +78,7 @@ func (g *Game) initPieces() {
     for y := rows - 3; y < rows; y++ {
         for x := 0; x < cols; x++ {
             if (x+y)%2 != 0 {
-                piece := NewPiece(Black, x, y, "checkersObj/black_default.png", "checkersObj/black_queen.png")
+                piece := NewPiece(Black, x, y, "checkersObj/black_default.png", "checkersObj/black_king.png")
                 g.pieces = append(g.pieces, piece)
                 g.board[y][x] = piece
             }
