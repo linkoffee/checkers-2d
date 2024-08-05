@@ -346,27 +346,45 @@ func (g *Game) switchPlayer() {
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
+	// Draw the board
 	for y := 0; y < boardRows; y++ {
 		for x := 0; x < boardCols; x++ {
+			cellColor := color.RGBA{139, 69, 19, 255} // Dark brown
 			if (x+y)%2 == 0 {
-				vector.DrawFilledRect(screen, float32(x*cellSize), float32(y*cellSize), float32(cellSize), float32(cellSize), color.RGBA{245, 245, 220, 255}, false)
-			} else {
-				vector.DrawFilledRect(screen, float32(x*cellSize), float32(y*cellSize), float32(cellSize), float32(cellSize), color.RGBA{175, 128, 79, 255}, false)
+				cellColor = color.RGBA{222, 184, 135, 255} // Light brown
 			}
+			vector.DrawFilledRect(screen, float32(x*cellSize), float32(y*cellSize), float32(cellSize), float32(cellSize), cellColor, true)
 		}
 	}
 
+	// Highlight the hovered cell
+	if g.hoverX >= 0 && g.hoverY >= 0 && g.hoverX < boardCols && g.hoverY < boardRows {
+		highlightColor := color.RGBA{0, 255, 0, 128} // Green with some transparency
+		if g.selectedPiece != nil && !g.isValidMove(g.selectedPiece, g.hoverX, g.hoverY) {
+			highlightColor = color.RGBA{255, 0, 0, 128} // Red with some transparency
+		}
+		vector.DrawFilledRect(screen, float32(g.hoverX*cellSize), float32(g.hoverY*cellSize), float32(cellSize), float32(cellSize), highlightColor, true)
+	}
+
+	// Draw the pieces
 	for _, piece := range g.pieces {
-		piece.Draw(screen)
+		options := &ebiten.DrawImageOptions{}
+		options.GeoM.Translate(float64(piece.x*cellSize), float64(piece.y*cellSize))
+		if piece.isKing {
+			screen.DrawImage(piece.kingImage, options)
+		} else {
+			screen.DrawImage(piece.image, options)
+		}
 	}
 
+	// Highlight the selected piece
 	if g.selectedPiece != nil {
-		g.selectedPiece.DrawHighlight(screen, color.RGBA{0, 255, 0, 100})
+		vector.DrawFilledRect(screen, float32(g.selectedPiece.x*cellSize), float32(g.selectedPiece.y*cellSize), float32(cellSize), float32(cellSize), color.RGBA{0, 0, 255, 128}, true) // Blue with some transparency
 	}
+}
 
-	if g.gameOver {
-		g.resetGame()
-	}
+func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
+	return winWidth, winHeight
 }
 
 func (g *Game) resetGame() {
@@ -375,10 +393,6 @@ func (g *Game) resetGame() {
 		g.currentPlayer = White
 		g.gameOver = false
 	}
-}
-
-func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
-	return winWidth, winHeight
 }
 
 func (g *Game) checkWin() bool {
