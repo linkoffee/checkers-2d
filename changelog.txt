@@ -1,0 +1,29 @@
+Changelog: Checkers-2d
+======================
+[INFO]
+Here is a full report of all versions of the project.
+New versions at the top, old ones at the bottom
+
+-----------------------
+[0.21 Alpha] 05/08/2024
+-----------------------
+[CHANGES]
+- board color changed
+- now all possible and impossible moves, as well as the selected checker are highlighted
+- add window icon
+
+----------------------
+[0.2 Alpha] 28/07/2024
+----------------------
+[CHANGES]
+- bug fixed: checkers cut through 2 cells
+- bug fixed: the game does not end if there are no more moves left
+
+--------------------------
+[0.1 Pre-Alpha] 27/07/2024
+--------------------------
+[CHANGES]
+- added checkers board
+- added checkers objects
+- add background music, sounds
+- game is generally playable, but it's very clumsy
