@@ -3,8 +3,8 @@
 
 Checkers is a board game for two players where they take turns moving their checkers around a square board and attempting to capture the opponent's checkers. players win by forcing their opponent into a position where they have no more available moves or lose all of their checkers.
 
-> [!NOTE]
-> Current version => `0.21`
+![Version](https://img.shields.io/badge/version-0.21-blue)
+![License](https://img.shields.io/github/license/linkoffee/checkers-2d)
 
 ### Rules
 1. `Playing Field`: Checkers are played on a square 8x8 field, the main game is played on dark squares.
@@ -65,8 +65,8 @@ Or **Linux/macOS**:
 `After that the game file will start, you can rename it as you want, it will not affect its operation.`
 
 <div>
-  <img src="https://habrastorage.org/webt/vz/z9/a2/vzz9a2gncqbjfix9ypmayy_nvem.png" width="33%" />
-  <img src="https://habrastorage.org/webt/v6/kg/5z/v6kg5znb6yv70ddgdfizlg_ewae.png" width="33%" />
+  <img src="https://habrastorage.org/webt/3e/sm/w_/3esmw_pqheskcsvotltc-hnqfmq.png" width="33%" />
+  <img src="https://habrastorage.org/webt/9k/gu/2j/9kgu2j982cpb5ev8nxntbfr3uko.png" width="33%" />
 </div>
 
 ---
