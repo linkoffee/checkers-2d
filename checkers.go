@@ -9,7 +9,7 @@ import (
 func main() {
 	game := NewGame()
 
-	ebiten.SetWindowSize(windowWidth, windowHeight)
+	ebiten.SetWindowSize(winWidth, winHeight)
 	ebiten.SetWindowTitle("Checkers")
 
 	if err := ebiten.RunGame(game); err != nil {
