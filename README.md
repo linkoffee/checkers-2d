@@ -4,7 +4,7 @@
 Checkers is a board game for two players where they take turns moving their checkers around a square board and attempting to capture the opponent's checkers. players win by forcing their opponent into a position where they have no more available moves or lose all of their checkers.
 
 > [!NOTE]
-> Current version => `0.2`
+> Current version => `0.21`
 
 ### Rules
 1. `Playing Field`: Checkers are played on a square 8x8 field, the main game is played on dark squares.
