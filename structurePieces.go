@@ -18,19 +18,20 @@ const (
 )
 
 type Piece struct {
-    pieceType PieceType
-    x, y      int
-    isKing    bool
-    img       *ebiten.Image
-    kingImg   *ebiten.Image
+	pieceType PieceType
+	x         int
+	y         int
+	isKing    bool
+	image     *ebiten.Image
+	kingImage *ebiten.Image
 }
 
 func NewPiece(pieceType PieceType, x, y int, imgPath string, kingImgPath string) *Piece {
-    img, _, err := ebitenutil.NewImageFromFile(imgPath)
+    image, _, err := ebitenutil.NewImageFromFile(imgPath)
     if err != nil {
         log.Fatal(err)
     }
-    kingImg, _, err := ebitenutil.NewImageFromFile(kingImgPath)
+    kingImage, _, err := ebitenutil.NewImageFromFile(kingImgPath)
     if err != nil {
         log.Fatal(err)
     }
@@ -38,19 +39,20 @@ func NewPiece(pieceType PieceType, x, y int, imgPath string, kingImgPath string)
         pieceType: pieceType,
         x:         x,
         y:         y,
-        img:       img,
-        kingImg:   kingImg,
+        image:     image,
+        kingImage: kingImage,
     }
 }
 
 func (p *Piece) Draw(screen *ebiten.Image) {
-    op := &ebiten.DrawImageOptions{}
-    op.GeoM.Translate(float64(p.x*cellSize), float64(p.y*cellSize))
-    if p.isKing {
-        screen.DrawImage(p.kingImg, op)
-    } else {
-        screen.DrawImage(p.img, op)
-    }
+	op := &ebiten.DrawImageOptions{}
+	op.GeoM.Translate(float64(p.x*cellSize), float64(p.y*cellSize))
+
+	if p.isKing {
+		screen.DrawImage(p.kingImage, op)
+	} else {
+		screen.DrawImage(p.image, op)
+	}
 }
 
 func (p *Piece) DrawHighlight(screen *ebiten.Image, clr color.Color) {
@@ -59,6 +61,6 @@ func (p *Piece) DrawHighlight(screen *ebiten.Image, clr color.Color) {
 
 func (p *Piece) updateImage() {
     if p.isKing {
-        p.img = p.kingImg
+        p.image = p.kingImage
     }
 }
