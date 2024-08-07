@@ -2,10 +2,13 @@ package main
 
 import (
 	"bytes"
+	"image"
 	"image/color"
 	"io"
 	"log"
 	"os"
+	"strconv"
+	"time"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/audio"
@@ -13,11 +16,14 @@ import (
 	"github.com/hajimehoshi/ebiten/v2/audio/wav"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
 	"github.com/hajimehoshi/ebiten/v2/vector"
+	"golang.org/x/image/font"
+	"golang.org/x/image/font/basicfont"
+	"golang.org/x/image/math/fixed"
 )
 
 const (
 	winWidth   = 800
-	winHeight  = 800
+	winHeight  = 900
 	boardRows  = 8
 	boardCols  = 8
 	cellSize   = winWidth / boardCols
@@ -25,18 +31,22 @@ const (
 )
 
 type Game struct {
-	board         [][]*Piece
-	pieces        []*Piece
-	hoverX        int
-	hoverY        int
-	selectedPiece *Piece
-	currentPlayer PieceType
-	audioContext  *audio.Context
-	bgMusicPlayer *audio.Player
-	movePlayer    *audio.Player
-	capturePlayer *audio.Player
-	winPlayer     *audio.Player
-	gameOver      bool
+	board            [][]*Piece
+	pieces           []*Piece
+	messages         []Message
+	hoverX           int
+	hoverY           int
+	selectedPiece    *Piece
+	currentPlayer    PieceType
+	audioContext     *audio.Context
+	bgMusicPlayer    *audio.Player
+	movePlayer       *audio.Player
+	wrongMovePlayer  *audio.Player
+	capturePlayer    *audio.Player
+	winPlayer        *audio.Player
+	gameOver         bool
+	whiteWins 	     int
+	blackWins        int
 }
 
 func NewGame() *Game {
@@ -94,6 +104,12 @@ func (g *Game) initSounds() {
 		log.Fatal(err)
 	}
 	g.movePlayer = g.audioContext.NewPlayerFromBytes(moveSound)
+
+	wrongMoveSound, err := loadSound("sounds/wrong_move.wav")
+	if err != nil {
+		log.Fatal(err)
+	}
+	g.wrongMovePlayer = g.audioContext.NewPlayerFromBytes(wrongMoveSound)
 
 	captureSound, err := loadSound("sounds/capture.wav")
 	if err != nil {
@@ -198,9 +214,20 @@ func (g *Game) Update() error {
 				g.movePiece(g.selectedPiece, g.hoverX, g.hoverY)
 				g.switchPlayer()
 			} else {
-				log.Println("Wrong Move")
+				g.addMessage("Wrong Move", Error, 1*time.Second)
+				g.wrongMovePlayer.Rewind()
+				g.wrongMovePlayer.Play()
 			}
 			g.selectedPiece = nil
+		}
+	}
+
+	currentTime := time.Now().UnixNano()
+	for i := 0; i < len(g.messages); {
+		if g.messages[i].showUntil <= currentTime {
+			g.messages = append(g.messages[:i], g.messages[i+1:]...)
+		} else {
+			i++
 		}
 	}
 
@@ -381,6 +408,34 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	if g.selectedPiece != nil {
 		vector.DrawFilledRect(screen, float32(g.selectedPiece.x*cellSize), float32(g.selectedPiece.y*cellSize), float32(cellSize), float32(cellSize), color.RGBA{0, 0, 255, 128}, true) // Blue with some transparency
 	}
+
+	// Draw messages:
+	for _, message := range g.messages {
+		var displayColor color.Color
+		if message.messageType == Error {
+			displayColor = color.RGBA{255, 0, 0, 255}
+		} else if message.messageType == Success {
+			displayColor = color.RGBA{0, 200, 0, 255}
+		} else {
+			displayColor = color.RGBA{255, 255, 0, 255}
+		}
+		drawText(screen, message.text, (winWidth/2)-(winHeight-winWidth)/2, winHeight-75, displayColor)
+	}
+
+	// Draw scores under board:
+	drawText(screen, "White Wins: "+strconv.Itoa(g.whiteWins), 10, winHeight-30, color.White)
+	drawText(screen, "Black Wins: "+strconv.Itoa(g.blackWins), winWidth-150, winHeight-30, color.White)
+}
+
+func drawText(screen *ebiten.Image, text string, x, y int, clr color.Color) {
+	face := basicfont.Face7x13
+	d := &font.Drawer{
+		Dst:  screen,
+		Src:  image.NewUniform(clr),
+		Face: face,
+		Dot:  fixed.Point26_6{X: fixed.I(x), Y: fixed.I(y)},
+	}
+	d.DrawString(text)
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
@@ -408,11 +463,15 @@ func (g *Game) checkWin() bool {
 
 	// Check if either player has no pieces left
 	if whiteCount == 0 {
+		g.blackWins++
+		g.addMessage("BLACK WON!", Success, 3*time.Second)
 		g.winPlayer.Rewind()
 		g.winPlayer.Play()
 		return true
 	}
 	if blackCount == 0 {
+		g.whiteWins++
+		g.addMessage("WHITE WON!", Success, 3*time.Second)
 		g.winPlayer.Rewind()
 		g.winPlayer.Play()
 		return true
