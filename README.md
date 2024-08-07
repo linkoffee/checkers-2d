@@ -5,6 +5,7 @@ Checkers is a board game for two players where they take turns moving their chec
 
 ![Version](https://img.shields.io/badge/version-0.22-blue)
 ![License](https://img.shields.io/github/license/linkoffee/checkers-2d)
+[![View Changes](https://img.shields.io/badge/view_changes-click-red)](https://github.com/linkoffee/checkers-2d/blob/main/changelog.txt)
 
 ### Rules
 1. `Playing Field`: Checkers are played on a square 8x8 field, the main game is played on dark squares.
