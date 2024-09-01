@@ -15,6 +15,7 @@ import (
 	"github.com/hajimehoshi/ebiten/v2/audio/mp3"
 	"github.com/hajimehoshi/ebiten/v2/audio/wav"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
+	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/hajimehoshi/ebiten/v2/vector"
 	"golang.org/x/image/font"
 	"golang.org/x/image/font/basicfont"
@@ -28,6 +29,11 @@ const (
 	boardCols  = 8
 	cellSize   = winWidth / boardCols
 	sampleRate = 44100
+)
+
+var (
+	isSoundOn = true
+	isMusicOn = true
 )
 
 type Game struct {
@@ -44,6 +50,10 @@ type Game struct {
 	wrongMovePlayer  *audio.Player
 	capturePlayer    *audio.Player
 	winPlayer        *audio.Player
+	soundOnImage     *ebiten.Image
+	soundOffImage    *ebiten.Image
+	musicOnImage     *ebiten.Image
+	musicOffImage    *ebiten.Image
 	gameOver         bool
 	whiteWins 	     int
 	blackWins        int
@@ -62,6 +72,7 @@ func NewGame() *Game {
 
 	game.initPieces()
 	game.initSounds()
+	game.loadImages()
 	return game
 }
 
@@ -77,7 +88,7 @@ func (g *Game) initPieces() {
 	for y := 0; y < 3; y++ {
 		for x := 0; x < boardCols; x++ {
 			if (x+y)%2 != 0 {
-				piece := NewPiece(White, x, y, "checkersObj/white_default.png", "checkersObj/white_king.png")
+				piece := NewPiece(White, x, y, "assets/checkersObj/white_default.png", "assets/checkersObj/white_king.png")
 				g.pieces = append(g.pieces, piece)
 				g.board[y][x] = piece
 			}
@@ -88,12 +99,32 @@ func (g *Game) initPieces() {
 	for y := boardRows - 3; y < boardRows; y++ {
 		for x := 0; x < boardCols; x++ {
 			if (x+y)%2 != 0 {
-				piece := NewPiece(Black, x, y, "checkersObj/black_default.png", "checkersObj/black_king.png")
+				piece := NewPiece(Black, x, y, "assets/checkersObj/black_default.png", "assets/checkersObj/black_king.png")
 				g.pieces = append(g.pieces, piece)
 				g.board[y][x] = piece
 			}
 		}
 	}
+}
+
+func (g *Game) loadImages() {
+    var err error
+    g.soundOnImage, _, err = ebitenutil.NewImageFromFile("assets/interfaceObj/sound_on.png")
+    if err != nil {
+        log.Fatal(err)
+    }
+    g.soundOffImage, _, err = ebitenutil.NewImageFromFile("assets/interfaceObj/sound_off.png")
+    if err != nil {
+        log.Fatal(err)
+    }
+    g.musicOnImage, _, err = ebitenutil.NewImageFromFile("assets/interfaceObj/music_on.png")
+    if err != nil {
+        log.Fatal(err)
+    }
+    g.musicOffImage, _, err = ebitenutil.NewImageFromFile("assets/interfaceObj/music_off.png")
+    if err != nil {
+        log.Fatal(err)
+    }
 }
 
 func (g *Game) initSounds() {
@@ -181,6 +212,42 @@ func loadSound(path string) ([]byte, error) {
 }
 
 func (g *Game) Update() error {
+	x, y := ebiten.CursorPosition()
+
+	// Position of the sound button
+	soundButtonX := (winWidth / 2) - 35
+	soundButtonY := winHeight - 50
+
+	// Position of the music button
+	musicButtonX := winWidth / 2
+	musicButtonY := winHeight - 50
+
+	if inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
+		if x >= soundButtonX && x <= soundButtonX+40 && y >= soundButtonY && y <= soundButtonY+40 {
+			isSoundOn = !isSoundOn
+			if isSoundOn {
+				g.movePlayer.SetVolume(0.5)
+				g.wrongMovePlayer.SetVolume(0.5)
+				g.capturePlayer.SetVolume(0.5)
+				g.winPlayer.SetVolume(0.5)
+			} else {
+				g.movePlayer.SetVolume(0)
+				g.wrongMovePlayer.SetVolume(0)
+				g.capturePlayer.SetVolume(0)
+				g.winPlayer.SetVolume(0)
+			}
+		}
+
+		if x >= musicButtonX && x <= musicButtonX+40 && y >= musicButtonY && y <= musicButtonY+40 {
+			isMusicOn = !isMusicOn
+			if isMusicOn {
+				g.bgMusicPlayer.SetVolume(0.25)
+			} else {
+				g.bgMusicPlayer.SetVolume(0)
+			}
+		}
+	}
+
 	if g.gameOver {
 		if !g.winPlayer.IsPlaying() {
 			g.resetGame()
@@ -421,6 +488,28 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		}
 		drawText(screen, message.text, (winWidth/2)-(winHeight-winWidth)/2, winHeight-75, displayColor)
 	}
+
+	// Draw sound on/off button:
+	if isSoundOn {
+		op := &ebiten.DrawImageOptions{}
+		op.GeoM.Translate(float64(winWidth / 2) - 35, float64(winHeight-50))
+		screen.DrawImage(g.soundOnImage, op)
+	} else {
+		op := &ebiten.DrawImageOptions{}
+		op.GeoM.Translate(float64(winWidth / 2) - 35, float64(winHeight-50))
+		screen.DrawImage(g.soundOffImage, op)
+	}
+
+	// Draw music on/off button:
+	if isMusicOn {
+        op := &ebiten.DrawImageOptions{}
+        op.GeoM.Translate(float64(winWidth / 2), float64(winHeight-50))
+        screen.DrawImage(g.musicOnImage, op)
+    } else {
+        op := &ebiten.DrawImageOptions{}
+        op.GeoM.Translate(float64(winWidth / 2), float64(winHeight-50))
+        screen.DrawImage(g.musicOffImage, op)
+    }
 
 	// Draw scores under board:
 	drawText(screen, "White Wins: "+strconv.Itoa(g.whiteWins), 10, winHeight-30, color.White)
