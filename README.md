@@ -3,7 +3,7 @@
 
 Checkers is a board game for two players where they take turns moving their checkers around a square board and attempting to capture the opponent's checkers. players win by forcing their opponent into a position where they have no more available moves or lose all of their checkers.
 
-[![Version](https://img.shields.io/badge/version-0.22-blue)](https://github.com/linkoffee/checkers-2d/releases/tag/0.22-alpha)
+[![Version](https://img.shields.io/badge/version-0.23-blue)](https://github.com/linkoffee/checkers-2d/releases/tag/0.23-alpha)
 [![License](https://img.shields.io/github/license/linkoffee/checkers-2d)](https://github.com/linkoffee/checkers-2d/blob/main/LICENSE)
 [![View Changes](https://img.shields.io/badge/view_changes-click-red)](https://github.com/linkoffee/checkers-2d/blob/main/changelog.txt)
 
