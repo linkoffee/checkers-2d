@@ -2,4 +2,12 @@
 The icon was created using flaticon.com
 Author: Nikita Golubev
 Link: https://www.flaticon.com/ru/authors/nikita-golubev
+
+COPYRIGHT NOTICE
+
+The icon in this directory are licensed under the following terms:
+1. Usage: This icon are free to use in both non-commercial and commercial projects, subject to 2 conditions (see below).
+2. Attribution: When using this icon, attribution is required. Please include the following credit:
+Author: Nikita Golubev
+Link: https://www.flaticon.com/ru/authors/nikita-golubev
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
