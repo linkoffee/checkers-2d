@@ -1,0 +1,12 @@
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+Author: Mikhail Kopochinskiy
+Link: https://github.com/linkoffee
+
+COPYRIGHT NOTICE
+
+The images in this directory are licensed under the following terms:
+1. Usage: These images are free to use in both non-commercial and commercial projects, subject to 2 conditions (see below).
+2. Attribution: When using these images, attribution is required. Please include the following credit:
+Author: Mikhail Kopochinskiy
+Link: https://github.com/linkoffee
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
