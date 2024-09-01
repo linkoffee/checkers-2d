@@ -5,6 +5,12 @@ Here is a full report of all versions of the project.
 New versions at the top, old ones at the bottom
 
 -----------------------
+[0.23 Alpha] 01/09/2024
+-----------------------
+[CHANGES]
+- added setting buttons to turn on/off sound, music (located at the bottom in the middle of the screen)
+
+-----------------------
 [0.22 Alpha] 07/08/2024
 -----------------------
 [CHANGES]
