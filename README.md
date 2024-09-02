@@ -65,9 +65,20 @@ Or **Linux/macOS**:
 ```
 `After that the game file will start, you can rename it as you want, it will not affect its operation.`
 
+> [!TIP]
+> At the bottom of the screen you can turn off all sounds or music - if suddenly you get tired of them
+
 <div>
-  <img src="https://habrastorage.org/webt/3e/sm/w_/3esmw_pqheskcsvotltc-hnqfmq.png" width="33%" />
-  <img src="https://habrastorage.org/webt/9k/gu/2j/9kgu2j982cpb5ev8nxntbfr3uko.png" width="33%" />
+  <img src="https://habrastorage.org/webt/o8/9z/wy/o89zwyel1ygrckxqt6amjpcc-ca.png" width="33%" />
+  <img src="https://habrastorage.org/webt/8s/ue/zc/8suezc4bea65gyn_lo7deijieda.png" width="33%" />
+</div>
+
+> [!NOTE]
+> The cell on which the selected checker is located, is highlighted in **Blue** `#0000ff`, the available or possible moves of the selected checker are highlighted in **Green** `#00ff00`, and the unavailable or impossible moves of the selected checker are highlighted in **Red** `#ff0000`
+
+<div>
+  <img src="https://habrastorage.org/webt/q8/3g/di/q83gdi9qrkrihnnc-zup_9syrn0.png" width="33%" />
+  <img src="https://habrastorage.org/webt/kg/hd/bm/kghdbmxdqhtpwyuryujlto2lfza.png" width="33%" />
 </div>
 
 ---
